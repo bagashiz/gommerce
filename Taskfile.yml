@@ -1,0 +1,46 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  LOREM: "lorem"
+
+dotenv:
+  - ".env"
+
+tasks:
+  default:
+    desc: "Gettings started"
+    cmds:
+      - task: install
+
+  install:
+    desc: "Install dependencies"
+    cmds:
+      - go install github.com/go-task/task/v3/cmd/task@latest
+      - go install github.com/cosmtrek/air@latest
+      - go install github.com/swaggo/swag/cmd/swag@latest
+      # - go install github.com/onsi/ginkgo/v2/ginkgo@latest
+      # - go get github.com/onsi/gomega/...
+
+  dev:
+    desc: "Start development server"
+    cmd: air
+
+  build:
+    desc: "Build binary"
+    cmd: go build -o ./bin/{{.APP_NAME}} ./cmd/app/main.go
+    requires:
+      vars:
+        - APP_NAME
+
+  start:
+    desc: "Start binary"
+    cmd: ./bin/{{.APP_NAME}}
+    requires:
+      vars:
+        - APP_NAME
+
+  # test:
+  #   desc: "Run tests"
+  #   cmd: ginkgo -v -r --cover --race --keep-going --timeout=30s
