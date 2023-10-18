@@ -1,8 +1,9 @@
-package log
+package zap
 
 import (
 	"os"
 
+	"github.com/bagashiz/gommerce/internal/util/log"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -12,51 +13,55 @@ type Logger struct {
 	zap *zap.SugaredLogger
 }
 
-// logFile is the path to the file where the logs will be written.
-const logFile = "app.log"
+// filename is the path to the file where the logs will be written.
+const filename = "app.log"
 
 // New creates a new Log instance.
-func New() (LogProvider, error) {
-	// configure the time format
+func New() (log.LogProvider, error) {
+	var (
+		cores   []zapcore.Core
+		logFile *os.File
+		err     error
+	)
+
 	config := zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder
 
-	// create file and console encoders
-	fileEncoder := zapcore.NewJSONEncoder(config)
-	consoleEncoder := zapcore.NewConsoleEncoder(config)
-
-	// open the log file
-	logFile, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return nil, err
-	}
-
-	// create writers for file and console
-	fileWriter := zapcore.AddSync(logFile)
-	consoleWriter := zapcore.AddSync(os.Stdout)
-
-	// set the log level
-	defaultLogLevel := zapcore.DebugLevel
 	if os.Getenv("APP_ENV") == "production" {
-		defaultLogLevel = zapcore.InfoLevel
+		// Open the log file for production
+		logFile, err = os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			return nil, err
+		}
+
+		// Create a file core
+		fileCore := zapcore.NewCore(
+			zapcore.NewJSONEncoder(config),
+			zapcore.AddSync(logFile),
+			zapcore.InfoLevel,
+		)
+		cores = append(cores, fileCore)
 	}
 
-	// create cores for writing to the file and console
-	fileCore := zapcore.NewCore(fileEncoder, fileWriter, defaultLogLevel)
-	consoleCore := zapcore.NewCore(consoleEncoder, consoleWriter, defaultLogLevel)
+	// Create a console core
+	consoleCore := zapcore.NewCore(
+		zapcore.NewConsoleEncoder(config),
+		zapcore.AddSync(os.Stdout),
+		zapcore.DebugLevel,
+	)
+	cores = append(cores, consoleCore)
 
-	// combine cores
-	core := zapcore.NewTee(fileCore, consoleCore)
-
-	// create the logger with additional context information (caller, stack trace)
+	// Create the logger with additional context information (caller, stack trace)
 	logger := zap.New(
-		core,
+		zapcore.NewTee(cores...),
 		zap.AddCaller(),
 		zap.AddCallerSkip(1),
 		zap.AddStacktrace(zapcore.ErrorLevel),
 	).Sugar()
 
-	defer logger.Sync()
+	defer func() {
+		_ = logger.Sync()
+	}()
 
 	return &Logger{
 		logger,

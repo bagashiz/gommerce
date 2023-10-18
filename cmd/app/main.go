@@ -1,22 +1,22 @@
 package main
 
 import (
-	"github.com/bagashiz/gommerce/internal/util/config"
-	"github.com/bagashiz/gommerce/internal/util/log"
+	config "github.com/bagashiz/gommerce/internal/util/config/viper"
+	logger "github.com/bagashiz/gommerce/internal/util/log/zap"
 )
 
 func main() {
-	log, err := log.New()
+	log, err := logger.New()
 	if err != nil {
 		panic(err)
 	}
 
-	cp, err := config.New()
+	cfgProvier, err := config.New()
 	if err != nil {
 		log.Fatal("failed to initialize the config provider", "error", err)
 	}
 
-	cfg, err := cp.Load()
+	cfg, err := cfgProvier.Load()
 	if err != nil {
 		log.Fatal("failed to load the config", "error", err)
 	}
