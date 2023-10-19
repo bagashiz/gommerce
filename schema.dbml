@@ -1,0 +1,196 @@
+Project "Gommerce" {
+  database_type: 'MySQL'
+  Note: '''
+    # E-Commerce System
+  '''
+}
+
+Table "addresses" {
+  "id" bigint [pk, not null, increment]
+  "created_at" datetime(3) [default: NULL]
+  "updated_at" datetime(3) [default: NULL]
+  "deleted_at" datetime(3) [default: NULL]
+  "title" longtext
+  "receiver" longtext
+  "phone_number" longtext
+  "details" text
+  "user_id" bigint [not null]
+
+Indexes {
+  deleted_at [name: "idx_addresses_deleted_at"]
+  user_id [name: "fk_users_addresses"]
+}
+}
+
+Table "categories" {
+  "id" bigint [pk, not null, increment]
+  "created_at" datetime(3) [default: NULL]
+  "updated_at" datetime(3) [default: NULL]
+  "deleted_at" datetime(3) [default: NULL]
+  "name" varchar(191) [not null]
+
+Indexes {
+  name [unique, name: "name"]
+  deleted_at [name: "idx_categories_deleted_at"]
+}
+}
+
+Table "product_logs" {
+  "id" bigint [pk, not null, increment]
+  "created_at" datetime(3) [default: NULL]
+  "updated_at" datetime(3) [default: NULL]
+  "deleted_at" datetime(3) [default: NULL]
+  "product_id" bigint [not null]
+  "name" longtext
+  "slug" longtext
+  "reseller_price" bigint [default: NULL]
+  "retail_price" bigint [default: NULL]
+  "description" text
+  "shop_id" bigint [not null]
+  "category_id" bigint [not null]
+
+Indexes {
+  deleted_at [name: "idx_product_logs_deleted_at"]
+  shop_id [name: "fk_product_logs_shop"]
+  category_id [name: "fk_product_logs_category"]
+}
+}
+
+Table "product_photos" {
+  "id" bigint [pk, not null, increment]
+  "created_at" datetime(3) [default: NULL]
+  "updated_at" datetime(3) [default: NULL]
+  "deleted_at" datetime(3) [default: NULL]
+  "url" longtext
+  "product_id" bigint [not null]
+  "product_log_id" bigint [not null]
+
+Indexes {
+  deleted_at [name: "idx_product_photos_deleted_at"]
+  product_id [name: "idx_product_photos_product_id"]
+  product_log_id [name: "idx_product_photos_product_log_id"]
+}
+}
+
+Table "products" {
+  "id" bigint [pk, not null, increment]
+  "created_at" datetime(3) [default: NULL]
+  "updated_at" datetime(3) [default: NULL]
+  "deleted_at" datetime(3) [default: NULL]
+  "name" longtext
+  "slug" longtext
+  "reseller_price" bigint [default: NULL]
+  "retail_price" bigint [default: NULL]
+  "stock" bigint [default: NULL]
+  "description" text
+  "shop_id" bigint [not null]
+  "category_id" bigint [not null]
+
+Indexes {
+  deleted_at [name: "idx_products_deleted_at"]
+  shop_id [name: "fk_shops_products"]
+  category_id [name: "fk_categories_products"]
+}
+}
+
+Table "shops" {
+  "id" bigint [pk, not null, increment]
+  "created_at" datetime(3) [default: NULL]
+  "updated_at" datetime(3) [default: NULL]
+  "deleted_at" datetime(3) [default: NULL]
+  "name" longtext
+  "profile_picture" longtext
+  "user_id" bigint [not null]
+
+Indexes {
+  deleted_at [name: "idx_shops_deleted_at"]
+  user_id [name: "fk_users_shop"]
+}
+}
+
+Table "transaction_details" {
+  "id" bigint [pk, not null, increment]
+  "created_at" datetime(3) [default: NULL]
+  "updated_at" datetime(3) [default: NULL]
+  "deleted_at" datetime(3) [default: NULL]
+  "quantity" bigint [default: NULL]
+  "total_price" bigint [default: NULL]
+  "transaction_id" bigint [default: NULL]
+  "product_log_id" bigint [default: NULL]
+  "shop_id" bigint [default: NULL]
+
+Indexes {
+  deleted_at [name: "idx_transaction_details_deleted_at"]
+  product_log_id [name: "fk_transaction_details_product_log"]
+  shop_id [name: "fk_transaction_details_shop"]
+  transaction_id [name: "fk_transactions_transaction_details"]
+}
+}
+
+Table "transactions" {
+  "id" bigint [pk, not null, increment]
+  "created_at" datetime(3) [default: NULL]
+  "updated_at" datetime(3) [default: NULL]
+  "deleted_at" datetime(3) [default: NULL]
+  "total_price" bigint [default: NULL]
+  "invoice" varchar(191) [not null]
+  "payment_method" longtext
+  "user_id" bigint [default: NULL]
+  "address_id" bigint [default: NULL]
+
+Indexes {
+  invoice [unique, name: "invoice"]
+  deleted_at [name: "idx_transactions_deleted_at"]
+  address_id [name: "fk_transactions_address"]
+  user_id [name: "fk_users_transactions"]
+}
+}
+
+Table "users" {
+  "id" bigint [pk, not null, increment]
+  "created_at" datetime(3) [default: NULL]
+  "updated_at" datetime(3) [default: NULL]
+  "deleted_at" datetime(3) [default: NULL]
+  "name" longtext
+  "password" longtext
+  "phone_number" varchar(191) [not null]
+  "email" varchar(191) [not null]
+  "birth_date" datetime(3) [default: NULL]
+  "about" text
+  "job" longtext
+  "province_id" longtext
+  "city_id" longtext
+  "is_admin" tinyint(1) [default: "0"]
+
+Indexes {
+  phone_number [unique, name: "phone_number"]
+  email [unique, name: "email"]
+  deleted_at [name: "idx_users_deleted_at"]
+}
+}
+
+Ref "fk_users_addresses":"users"."id" < "addresses"."user_id"
+
+Ref "fk_product_logs_category":"categories"."id" < "product_logs"."category_id"
+
+Ref "fk_product_logs_shop":"shops"."id" < "product_logs"."shop_id"
+
+Ref "fk_product_logs_photos":"product_logs"."id" < "product_photos"."product_log_id"
+
+Ref "fk_products_photos":"products"."id" < "product_photos"."product_id"
+
+Ref "fk_categories_products":"categories"."id" < "products"."category_id"
+
+Ref "fk_shops_products":"shops"."id" < "products"."shop_id"
+
+Ref "fk_users_shop":"users"."id" < "shops"."user_id"
+
+Ref "fk_transaction_details_product_log":"product_logs"."id" < "transaction_details"."product_log_id"
+
+Ref "fk_transaction_details_shop":"shops"."id" < "transaction_details"."shop_id"
+
+Ref "fk_transactions_transaction_details":"transactions"."id" < "transaction_details"."transaction_id"
+
+Ref "fk_transactions_address":"addresses"."id" < "transactions"."address_id"
+
+Ref "fk_users_transactions":"users"."id" < "transactions"."user_id"

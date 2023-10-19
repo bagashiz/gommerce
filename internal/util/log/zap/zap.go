@@ -10,7 +10,7 @@ import (
 
 // Logger is a wrapper for the log interface using zap library.
 type Logger struct {
-	zap *zap.SugaredLogger
+	*zap.SugaredLogger
 }
 
 // filename is the path to the file where the logs will be written.
@@ -20,6 +20,7 @@ const filename = "app.log"
 func New() (log.LogProvider, error) {
 	var (
 		cores   []zapcore.Core
+		level   zapcore.Level = zap.DebugLevel
 		logFile *os.File
 		err     error
 	)
@@ -34,11 +35,13 @@ func New() (log.LogProvider, error) {
 			return nil, err
 		}
 
+		level = zap.InfoLevel
+
 		// Create a file core
 		fileCore := zapcore.NewCore(
 			zapcore.NewJSONEncoder(config),
 			zapcore.AddSync(logFile),
-			zapcore.InfoLevel,
+			level,
 		)
 		cores = append(cores, fileCore)
 	}
@@ -47,7 +50,7 @@ func New() (log.LogProvider, error) {
 	consoleCore := zapcore.NewCore(
 		zapcore.NewConsoleEncoder(config),
 		zapcore.AddSync(os.Stdout),
-		zapcore.DebugLevel,
+		level,
 	)
 	cores = append(cores, consoleCore)
 
@@ -59,10 +62,6 @@ func New() (log.LogProvider, error) {
 		zap.AddStacktrace(zapcore.ErrorLevel),
 	).Sugar()
 
-	defer func() {
-		_ = logger.Sync()
-	}()
-
 	return &Logger{
 		logger,
 	}, nil
@@ -70,30 +69,39 @@ func New() (log.LogProvider, error) {
 
 // Debug logs a debug message.
 func (l *Logger) Debug(format string, args ...any) {
-	l.zap.Debugw(format, args...)
+	l.Debugw(format, args...)
 }
 
 // Info logs an info message.
 func (l *Logger) Info(format string, args ...any) {
-	l.zap.Infow(format, args...)
+	l.Infow(format, args...)
 }
 
 // Warn logs a warning message.
 func (l *Logger) Warn(format string, args ...any) {
-	l.zap.Warnw(format, args...)
+	l.Warnw(format, args...)
 }
 
 // Error logs an error message.
 func (l *Logger) Error(format string, args ...any) {
-	l.zap.Errorw(format, args...)
+	l.Errorw(format, args...)
 }
 
 // Fatal logs a fatal message.
 func (l *Logger) Fatal(format string, args ...any) {
-	l.zap.Fatalw(format, args...)
+	l.Fatalw(format, args...)
 }
 
 // Panic logs a panic message.
 func (l *Logger) Panic(format string, args ...any) {
-	l.zap.Panicw(format, args...)
+	l.Panicw(format, args...)
+}
+
+// Close flushes any buffered log entries.
+func (l *Logger) Close() error {
+	if err := l.Sync(); err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -23,6 +23,14 @@ tasks:
       # - go install github.com/onsi/ginkgo/v2/ginkgo@latest
       # - go get github.com/onsi/gomega/...
 
+  service:up:
+    desc: "Start services containers"
+    cmd: podman-compose up -d
+
+  service:down:
+    desc: "Stop services and remove containers"
+    cmd: podman-compose down
+
   dev:
     desc: "Start development server"
     cmd: air
