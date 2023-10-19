@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/bagashiz/gommerce/internal/dao"
 	"github.com/bagashiz/gommerce/internal/store"
 	"github.com/bagashiz/gommerce/internal/util/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 // Mysql is a wrapper for GORM database connection
@@ -25,7 +27,9 @@ func New(cfg *config.Database) (store.DB, error) {
 		cfg.Name,
 	)
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +57,15 @@ func New(cfg *config.Database) (store.DB, error) {
 // Migrate runs the auto migration for the database.
 func (m *Mysql) Migrate() error {
 	return m.AutoMigrate(
-	// TODO: Add models here
+		dao.User{},
+		dao.Address{},
+		dao.Shop{},
+		dao.Category{},
+		dao.Product{},
+		dao.ProductPhoto{},
+		dao.ProductLog{},
+		dao.Transaction{},
+		dao.TransactionDetail{},
 	)
 }
 
