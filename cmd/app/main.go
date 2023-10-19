@@ -11,11 +11,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer func() {
-		if err := log.Close(); err != nil {
-			log.Fatal("failed to close the logger", "error", err)
-		}
-	}()
+	defer log.Close()
 
 	cfgProvier, err := config.New()
 	if err != nil {

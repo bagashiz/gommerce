@@ -14,4 +14,6 @@ type LogProvider interface {
 	Fatal(format string, args ...any)
 	// Panic logs a panic message.
 	Panic(format string, args ...any)
+	// Close flushes any buffered log entries.
+	Close() error
 }
