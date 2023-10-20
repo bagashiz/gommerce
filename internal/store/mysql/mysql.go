@@ -14,7 +14,7 @@ import (
 
 // Mysql is a wrapper for GORM database connection
 type Mysql struct {
-	*gorm.DB
+	Conn *gorm.DB
 }
 
 // New creates a new GORM database instance
@@ -56,7 +56,7 @@ func New(cfg *config.Database) (store.DB, error) {
 
 // Migrate runs the auto migration for the database.
 func (m *Mysql) Migrate() error {
-	return m.AutoMigrate(
+	return m.Conn.AutoMigrate(
 		dao.User{},
 		dao.Address{},
 		dao.Shop{},
@@ -69,9 +69,14 @@ func (m *Mysql) Migrate() error {
 	)
 }
 
+// DB returns the underlying database connection.
+func (m *Mysql) DB() *gorm.DB {
+	return m.Conn
+}
+
 // Close closes the database connection.
 func (m *Mysql) Close() error {
-	sqlDB, err := m.DB.DB()
+	sqlDB, err := m.Conn.DB()
 	if err != nil {
 		return err
 	}
