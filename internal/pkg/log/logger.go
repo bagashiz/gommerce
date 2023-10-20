@@ -1,7 +1,7 @@
 package log
 
-// LogProvider is an interface that defines the methods for the logger.
-type LogProvider interface {
+// Logger is an interface that defines the methods for the logger.
+type Logger interface {
 	// Debug logs a debug message.
 	Debug(format string, args ...any)
 	// Info logs an info message.

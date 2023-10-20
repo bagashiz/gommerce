@@ -4,17 +4,17 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bagashiz/gommerce/internal/util/config"
+	"github.com/bagashiz/gommerce/internal/pkg/config"
 	"github.com/spf13/viper"
 )
 
-// Config is a wrapper for configuration provider using viper library.
-type Config struct {
-	v *viper.Viper
+// Viper is a wrapper for configuration provider using viper library.
+type Viper struct {
+	*viper.Viper
 }
 
 // New creates a new Config instance.
-func New() (config.ConfigProvider, error) {
+func New() (config.Loader, error) {
 	v := viper.New()
 
 	// get the root directory of the application to find the config file.
@@ -34,24 +34,24 @@ func New() (config.ConfigProvider, error) {
 		return nil, err
 	}
 
-	return &Config{
+	return &Viper{
 		v,
 	}, nil
 }
 
 // Load initializes the application and its dependencies configuration.
-func (c *Config) Load() (*config.Container, error) {
-	app, err := c.newAppConfig()
+func (v *Viper) Load() (*config.Container, error) {
+	app, err := v.newAppConfig()
 	if err != nil {
 		return nil, err
 	}
 
-	http, err := c.newHttpConfig()
+	http, err := v.newHttpConfig()
 	if err != nil {
 		return nil, err
 	}
 
-	db, err := c.newDBConfig()
+	db, err := v.newDBConfig()
 	if err != nil {
 		return nil, err
 	}
@@ -64,10 +64,10 @@ func (c *Config) Load() (*config.Container, error) {
 }
 
 // newAppConfig initializes the application configuration.
-func (c *Config) newAppConfig() (*config.App, error) {
+func (v *Viper) newAppConfig() (*config.App, error) {
 	var app *config.App
 
-	err := c.v.Unmarshal(&app)
+	err := v.Viper.Unmarshal(&app)
 	if err != nil {
 		return nil, err
 	}
@@ -76,10 +76,10 @@ func (c *Config) newAppConfig() (*config.App, error) {
 }
 
 // newHttpConfig initializes the http server configuration.
-func (c *Config) newHttpConfig() (*config.Http, error) {
+func (v *Viper) newHttpConfig() (*config.Http, error) {
 	var http *config.Http
 
-	err := c.v.Unmarshal(&http)
+	err := v.Viper.Unmarshal(&http)
 	if err != nil {
 		return nil, err
 	}
@@ -88,10 +88,10 @@ func (c *Config) newHttpConfig() (*config.Http, error) {
 }
 
 // newDBConfig initializes the database configuration.
-func (c *Config) newDBConfig() (*config.Database, error) {
+func (v *Viper) newDBConfig() (*config.Database, error) {
 	var db *config.Database
 
-	err := c.v.Unmarshal(&db)
+	err := v.Viper.Unmarshal(&db)
 	if err != nil {
 		return nil, err
 	}
