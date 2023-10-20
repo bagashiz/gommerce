@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/bagashiz/gommerce/internal/dao"
-	"github.com/bagashiz/gommerce/internal/store"
-	"github.com/bagashiz/gommerce/internal/util/config"
+	store "github.com/bagashiz/gommerce/internal/database"
+	"github.com/bagashiz/gommerce/internal/database/dao"
+	"github.com/bagashiz/gommerce/internal/pkg/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -14,7 +14,8 @@ import (
 
 // Mysql is a wrapper for GORM database connection
 type Mysql struct {
-	*gorm.DB
+	Conn *gorm.DB
+	cfg  *config.Database
 }
 
 // New creates a new GORM database instance
@@ -51,12 +52,13 @@ func New(cfg *config.Database) (store.DB, error) {
 
 	return &Mysql{
 		db,
+		cfg,
 	}, nil
 }
 
 // Migrate runs the auto migration for the database.
 func (m *Mysql) Migrate() error {
-	return m.AutoMigrate(
+	return m.Conn.AutoMigrate(
 		dao.User{},
 		dao.Address{},
 		dao.Shop{},
@@ -69,9 +71,14 @@ func (m *Mysql) Migrate() error {
 	)
 }
 
+// DB returns the underlying database connection.
+func (m *Mysql) DB() *gorm.DB {
+	return m.Conn
+}
+
 // Close closes the database connection.
 func (m *Mysql) Close() error {
-	sqlDB, err := m.DB.DB()
+	sqlDB, err := m.Conn.DB()
 	if err != nil {
 		return err
 	}
