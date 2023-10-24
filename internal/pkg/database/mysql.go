@@ -1,25 +1,24 @@
-package mysql
+package database
 
 import (
 	"fmt"
 	"time"
 
-	store "github.com/bagashiz/gommerce/internal/database"
-	"github.com/bagashiz/gommerce/internal/database/dao"
 	"github.com/bagashiz/gommerce/internal/pkg/config"
+	"github.com/bagashiz/gommerce/internal/pkg/database/dao"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
-// Mysql is a wrapper for GORM database connection
+// Mysql is a wrapper for GORM mysql driver
 type Mysql struct {
 	Conn *gorm.DB
 	cfg  *config.Database
 }
 
-// New creates a new GORM database instance
-func New(cfg *config.Database) (store.DB, error) {
+// newMysql creates a new GORM mysql driver instance
+func newMysql(cfg *config.Database) (DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		cfg.Username,
 		cfg.Password,
@@ -29,7 +28,8 @@ func New(cfg *config.Database) (store.DB, error) {
 	)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		Logger:         logger.Default.LogMode(logger.Silent),
+		TranslateError: true,
 	})
 	if err != nil {
 		return nil, err
