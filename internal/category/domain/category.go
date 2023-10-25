@@ -4,6 +4,8 @@ import (
 	"context"
 )
 
+//go:generate mockgen -source=category.go -destination=mock/category.go -package=mock
+
 // Category is a struct that represents the Category of products.
 type Category struct {
 	ID   uint   `json:"id"`
