@@ -2,13 +2,11 @@ package dao
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 // User is a struct that represent the user table in database
 type User struct {
-	gorm.Model
+	Model
 	Name         string        `json:"name"`
 	Password     string        `json:"password"`
 	PhoneNumber  string        `json:"phone_number" gorm:"unique;not null"`
