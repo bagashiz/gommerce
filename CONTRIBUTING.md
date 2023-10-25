@@ -56,6 +56,7 @@ When submitting code changes, please adhere to the following standards:
 2. **Packages and imports**: Use goimports to organize imports and remove unused imports.
 3. **Naming conventions**: Follow the Go naming conventions for variables, functions, and types. Use descriptive and meaningful names for variables, functions, and types. Avoid using abbreviations or acronyms unless they are well-known and widely used. Refer to the [Go Naming Slides](https://go.dev/talks/2014/names.slide) for more information.
 4. **Comments**: Include comments to explain complex logic or provide clarity where needed. Use complete sentences and follow the Go commenting style (e.g., `//` for single-line comments and `/** ... */` for multi-line comments).
+5. **Testing**: Include necessary unit tests for your code changes. Make sure your code changes pass all unit tests before submitting your changes. It uses [Ginkgo](https://onsi.github.io/ginkgo) as the testing framework and [Gomega](https://onsi.github.io/gomega) as the matcher library.
 
 ## Conclusion
 
