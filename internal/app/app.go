@@ -1,15 +1,16 @@
 package app
 
 import (
-	database "github.com/bagashiz/gommerce/internal/database/mysql"
-	config "github.com/bagashiz/gommerce/internal/pkg/config/viper"
-	logger "github.com/bagashiz/gommerce/internal/pkg/log/zap"
-	"github.com/bagashiz/gommerce/internal/server/http"
+	"github.com/bagashiz/gommerce/internal/category"
+	"github.com/bagashiz/gommerce/internal/pkg/config"
+	"github.com/bagashiz/gommerce/internal/pkg/database"
+	"github.com/bagashiz/gommerce/internal/pkg/log"
+	"github.com/bagashiz/gommerce/internal/pkg/server/http"
 )
 
 // Run is the entrypoint of the application, dependencies are injected here
 func Run() {
-	log, err := logger.New()
+	log, err := log.New()
 	if err != nil {
 		panic(err)
 	}
@@ -46,7 +47,9 @@ func Run() {
 	log.Info("succeed to migrate the database")
 
 	server := http.New(cfg.Http, log)
-	server.InitRoutes()
+
+	// Dependency injection
+	category.New(db, server)
 
 	log.Info("starting the application", "name", cfg.App.Name, "environment", cfg.App.Env)
 

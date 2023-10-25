@@ -17,3 +17,8 @@ type Logger interface {
 	// Close flushes any buffered log entries.
 	Close() error
 }
+
+// New initializes the logger.
+func New() (Logger, error) {
+	return newZap()
+}

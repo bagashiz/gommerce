@@ -1,9 +1,8 @@
-package zap
+package log
 
 import (
 	"os"
 
-	"github.com/bagashiz/gommerce/internal/pkg/log"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -16,8 +15,8 @@ type Zap struct {
 // filename is the path to the file where the logs will be written.
 const filename = "app.log"
 
-// New creates a new Log instance.
-func New() (log.Logger, error) {
+// newZap creates a new Log instance.
+func newZap() (Logger, error) {
 	config := zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder
 

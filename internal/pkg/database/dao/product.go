@@ -1,10 +1,8 @@
 package dao
 
-import "gorm.io/gorm"
-
 // Product is a struct that represent the product table in database
 type Product struct {
-	gorm.Model
+	Model
 	Name          string         `json:"name"`
 	Slug          string         `json:"slug"`
 	ResellerPrice int            `json:"reseller_price"`
@@ -20,7 +18,7 @@ type Product struct {
 
 // ProductLog is a struct that represent the product_logs table in database
 type ProductLog struct {
-	gorm.Model
+	Model
 	ProductID     uint           `json:"product_id" gorm:"not null"`
 	Name          string         `json:"name"`
 	Slug          string         `json:"slug"`
@@ -36,7 +34,7 @@ type ProductLog struct {
 
 // ProductPhoto is a struct that represent the product_photos table in database
 type ProductPhoto struct {
-	gorm.Model
+	Model
 	Url          string `json:"url"`
 	ProductID    uint   `json:"product_id" gorm:"not null;index"`
 	ProductLogID uint   `json:"product_log_id" gorm:"not null;index"`

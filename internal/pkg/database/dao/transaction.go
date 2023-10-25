@@ -1,10 +1,8 @@
 package dao
 
-import "gorm.io/gorm"
-
 // Transaction is a struct that represent the transaction table in database
 type Transaction struct {
-	gorm.Model
+	Model
 	TotalPrice         uint                `json:"total_price"`
 	Invoice            string              `json:"invoice" gorm:"unique;not null"`
 	PaymentMethod      string              `json:"payment_method"`
@@ -17,7 +15,7 @@ type Transaction struct {
 
 // TransactionDetail is a struct that represent the transaction_details table in database
 type TransactionDetail struct {
-	gorm.Model
+	Model
 	Quantity      uint        `json:"quantity"`
 	TotalPrice    uint        `json:"total_price"`
 	TransactionID uint        `json:"transaction_id"`

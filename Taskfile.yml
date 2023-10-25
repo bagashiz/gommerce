@@ -20,8 +20,9 @@ tasks:
       - go install github.com/go-task/task/v3/cmd/task@latest
       - go install github.com/cosmtrek/air@latest
       - go install github.com/swaggo/swag/cmd/swag@latest
-      # - go install github.com/onsi/ginkgo/v2/ginkgo@latest
-      # - go get github.com/onsi/gomega/...
+      - go install go.uber.org/mock/mockgen@latest
+      - go install github.com/onsi/ginkgo/v2/ginkgo@latest
+      - go get github.com/onsi/gomega/...
 
   service:up:
     desc: "Start services containers"
@@ -49,6 +50,6 @@ tasks:
       vars:
         - APP_NAME
 
-  # test:
-  #   desc: "Run tests"
-  #   cmd: ginkgo -v -r --cover --race --keep-going --timeout=30s
+  test:
+    desc: "Run tests"
+    cmd: ginkgo -v -r --cover --race --keep-going --timeout=30s

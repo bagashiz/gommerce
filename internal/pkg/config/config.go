@@ -1,7 +1,7 @@
 package config
 
-// Loader is an interface that defines the methods for the configuration loader.
-type Loader interface {
+// Config is an interface that defines the methods for the configuration loader.
+type Config interface {
 	// Load initializes the application and its dependencies configuration.
 	Load() (*Container, error)
 }
@@ -40,3 +40,8 @@ type (
 		MaxIdleConn int    `mapstructure:"DB_MAX_IDLE_CONNECTIONS"`
 	}
 )
+
+// New initializes the configuration loader.
+func New() (Config, error) {
+	return newViper()
+}
