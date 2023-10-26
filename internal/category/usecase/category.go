@@ -12,7 +12,7 @@ type CategoryUsecase struct {
 }
 
 // New creates a new CategoryUsecase instance.
-func New(repo domain.CategoryRepository) domain.CategoryRepository {
+func New(repo domain.CategoryRepository) domain.CategoryUsecase {
 	return &CategoryUsecase{
 		repo,
 	}

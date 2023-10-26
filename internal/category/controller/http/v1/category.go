@@ -15,7 +15,7 @@ type CategoryControllerV1 struct {
 	server *http.Http
 }
 
-// New creates a new instance of CategoryController
+// New creates a new instance of CategoryControllerV1
 func New(uc domain.CategoryUsecase, server *http.Http) *CategoryControllerV1 {
 	return &CategoryControllerV1{
 		uc,
