@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/bagashiz/gommerce/internal/category/domain"
+	"github.com/bagashiz/gommerce/internal/app/category/domain"
 	"github.com/bagashiz/gommerce/internal/pkg/database"
 	"github.com/bagashiz/gommerce/internal/pkg/database/dao"
 	"github.com/bagashiz/gommerce/internal/pkg/helper"

@@ -3,7 +3,7 @@ package v1
 import (
 	"errors"
 
-	"github.com/bagashiz/gommerce/internal/category/domain"
+	"github.com/bagashiz/gommerce/internal/app/category/domain"
 	"github.com/bagashiz/gommerce/internal/pkg/helper"
 	"github.com/bagashiz/gommerce/internal/pkg/server/http"
 	"github.com/gofiber/fiber/v2"
@@ -15,7 +15,7 @@ type CategoryControllerV1 struct {
 	server *http.Http
 }
 
-// New creates a new instance of CategoryController
+// New creates a new instance of CategoryControllerV1
 func New(uc domain.CategoryUsecase, server *http.Http) *CategoryControllerV1 {
 	return &CategoryControllerV1{
 		uc,

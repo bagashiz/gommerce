@@ -1,9 +1,9 @@
 package category
 
 import (
-	v1 "github.com/bagashiz/gommerce/internal/category/controller/http/v1"
-	"github.com/bagashiz/gommerce/internal/category/repository"
-	"github.com/bagashiz/gommerce/internal/category/usecase"
+	v1 "github.com/bagashiz/gommerce/internal/app/category/controller/http/v1"
+	"github.com/bagashiz/gommerce/internal/app/category/repository"
+	"github.com/bagashiz/gommerce/internal/app/category/usecase"
 	"github.com/bagashiz/gommerce/internal/pkg/database"
 	"github.com/bagashiz/gommerce/internal/pkg/server/http"
 )

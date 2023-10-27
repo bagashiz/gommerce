@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/bagashiz/gommerce/internal/category/domain"
+	"github.com/bagashiz/gommerce/internal/app/category/domain"
 )
 
 // CategoryUsecase is a struct that implements CategoryUsecase interface.
@@ -12,7 +12,7 @@ type CategoryUsecase struct {
 }
 
 // New creates a new CategoryUsecase instance.
-func New(repo domain.CategoryRepository) domain.CategoryRepository {
+func New(repo domain.CategoryRepository) domain.CategoryUsecase {
 	return &CategoryUsecase{
 		repo,
 	}

@@ -1,10 +1,10 @@
 package v1
 
-import "github.com/bagashiz/gommerce/internal/category/domain"
+import "github.com/bagashiz/gommerce/internal/app/category/domain"
 
 // categoryParam is a struct for validating category path parameter
 type categoryParam struct {
-	ID uint `uri:"id" validate:"required"`
+	ID uint `params:"id" validate:"required"`
 }
 
 // categoryQuery is a struct for validating category query parameter
