@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/bagashiz/gommerce/internal/category"
+	"github.com/bagashiz/gommerce/internal/city"
 	"github.com/bagashiz/gommerce/internal/pkg/config"
 	"github.com/bagashiz/gommerce/internal/pkg/database"
 	"github.com/bagashiz/gommerce/internal/pkg/log"
@@ -51,6 +52,7 @@ func Run() {
 
 	// Dependency injection
 	province.New(server)
+	city.New(server)
 	category.New(db, server)
 
 	log.Info("starting the application", "name", cfg.App.Name, "environment", cfg.App.Env)
