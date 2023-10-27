@@ -1,5 +1,7 @@
 package domain
 
+//go:generate mockgen -source=city.go -destination=mock/city.go -package=mock
+
 // City is a struct that represents the User's address city.
 type City struct {
 	ID         string `json:"id"`
