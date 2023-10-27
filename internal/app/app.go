@@ -1,13 +1,13 @@
 package app
 
 import (
-	"github.com/bagashiz/gommerce/internal/category"
-	"github.com/bagashiz/gommerce/internal/city"
+	"github.com/bagashiz/gommerce/internal/app/category"
+	"github.com/bagashiz/gommerce/internal/app/city"
+	"github.com/bagashiz/gommerce/internal/app/province"
 	"github.com/bagashiz/gommerce/internal/pkg/config"
 	"github.com/bagashiz/gommerce/internal/pkg/database"
 	"github.com/bagashiz/gommerce/internal/pkg/log"
 	"github.com/bagashiz/gommerce/internal/pkg/server/http"
-	"github.com/bagashiz/gommerce/internal/province"
 )
 
 // Run is the entrypoint of the application, dependencies are injected here
