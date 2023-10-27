@@ -1,5 +1,7 @@
 package domain
 
+//go:generate mockgen -source=province.go -destination=mock/province.go -package=mock
+
 // Province is a struct that represents the User's address province.
 type Province struct {
 	ID   string `json:"id"`

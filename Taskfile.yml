@@ -50,6 +50,10 @@ tasks:
       vars:
         - APP_NAME
 
+  generate:
+    desc: "Generate code"
+    cmd: go generate ./...
+
   test:
     desc: "Run tests"
     cmd: ginkgo -v -r --cover --race --keep-going --timeout=30s
