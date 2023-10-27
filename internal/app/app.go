@@ -6,6 +6,7 @@ import (
 	"github.com/bagashiz/gommerce/internal/pkg/database"
 	"github.com/bagashiz/gommerce/internal/pkg/log"
 	"github.com/bagashiz/gommerce/internal/pkg/server/http"
+	"github.com/bagashiz/gommerce/internal/province"
 )
 
 // Run is the entrypoint of the application, dependencies are injected here
@@ -49,6 +50,7 @@ func Run() {
 	server := http.New(cfg.Http, log)
 
 	// Dependency injection
+	province.New(server)
 	category.New(db, server)
 
 	log.Info("starting the application", "name", cfg.App.Name, "environment", cfg.App.Env)
