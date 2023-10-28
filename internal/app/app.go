@@ -4,6 +4,7 @@ import (
 	"github.com/bagashiz/gommerce/internal/app/category"
 	"github.com/bagashiz/gommerce/internal/app/city"
 	"github.com/bagashiz/gommerce/internal/app/province"
+	"github.com/bagashiz/gommerce/internal/app/user"
 	"github.com/bagashiz/gommerce/internal/pkg/config"
 	"github.com/bagashiz/gommerce/internal/pkg/database"
 	"github.com/bagashiz/gommerce/internal/pkg/log"
@@ -54,6 +55,7 @@ func Run() {
 	province.New(server)
 	city.New(server)
 	category.New(db, server)
+	user.New(db, server)
 
 	log.Info("starting the application", "name", cfg.App.Name, "environment", cfg.App.Env)
 
