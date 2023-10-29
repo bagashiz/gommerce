@@ -22,4 +22,8 @@ var (
 	ErrDataNotFound = errors.New("data not found")
 	// ErrDataAlreadyExists is an error message for unique key constraint violation
 	ErrDataAlreadyExists = errors.New("data already exists")
+	// ErrUnauthorized is an error message for unauthorized access
+	ErrUnauthorized = errors.New("unauthorized")
+	// ErrForbidden is an error message for forbidden access
+	ErrForbidden = errors.New("forbidden")
 )

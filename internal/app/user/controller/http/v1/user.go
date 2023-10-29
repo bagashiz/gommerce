@@ -26,14 +26,14 @@ func New(uc domain.UserUsecase, server *http.Http) *UserControllerV1 {
 // GetByID handles GET /users request
 func (uc *UserControllerV1) GetByID(ctx *fiber.Ctx) error {
 	idCtx := ctx.Locals("id") // TODO: implement middleware to get user id from token
-	id := idCtx.(uint)
-
-	if id == 0 {
+	if idCtx == nil {
 		uc.server.Logger.Error("failed to get user id from context")
-		return helper.Response(ctx, fiber.StatusUnauthorized, false, helper.FAILEDPUTDATA, nil, nil)
+		return helper.Response(ctx, fiber.StatusUnauthorized, false, helper.FAILEDGETDATA, nil, nil)
 	}
 
-	res, err := uc.uc.GetByID(ctx.Context(), id)
+	userID := idCtx.(uint)
+
+	res, err := uc.uc.GetByID(ctx.Context(), userID)
 	if err != nil {
 		uc.server.Logger.Error("failed to get user", "error", err)
 
@@ -52,12 +52,12 @@ func (uc *UserControllerV1) GetByID(ctx *fiber.Ctx) error {
 // Update handles PUT /users request
 func (uc *UserControllerV1) Update(ctx *fiber.Ctx) error {
 	idCtx := ctx.Locals("id") // TODO: implement middleware to get user id from token
-	id := idCtx.(uint)
-
-	if id == 0 {
+	if idCtx == nil {
 		uc.server.Logger.Error("failed to get user id from context")
 		return helper.Response(ctx, fiber.StatusUnauthorized, false, helper.FAILEDPUTDATA, nil, nil)
 	}
+
+	userID := idCtx.(uint)
 
 	var req updateUserRequest
 
@@ -72,7 +72,7 @@ func (uc *UserControllerV1) Update(ctx *fiber.Ctx) error {
 	}
 
 	user := &domain.User{
-		ID:          id,
+		ID:          userID,
 		Name:        req.Name,
 		PhoneNumber: req.PhoneNumber,
 		Email:       req.Email,
