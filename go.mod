@@ -6,7 +6,7 @@ require (
 	github.com/go-playground/validator/v10 v10.15.5
 	github.com/gofiber/fiber/v2 v2.50.0
 	github.com/onsi/ginkgo/v2 v2.13.0
-	github.com/onsi/gomega v1.28.1
+	github.com/onsi/gomega v1.29.0
 	github.com/spf13/viper v1.17.0
 	go.uber.org/mock v0.3.0
 	go.uber.org/zap v1.26.0
