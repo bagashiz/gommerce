@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/bagashiz/gommerce/internal/app/auth"
 	"github.com/bagashiz/gommerce/internal/app/category"
 	"github.com/bagashiz/gommerce/internal/app/city"
 	"github.com/bagashiz/gommerce/internal/app/province"
@@ -10,6 +11,7 @@ import (
 	"github.com/bagashiz/gommerce/internal/pkg/database"
 	"github.com/bagashiz/gommerce/internal/pkg/log"
 	"github.com/bagashiz/gommerce/internal/pkg/server/http"
+	"github.com/bagashiz/gommerce/internal/pkg/token"
 )
 
 // Run is the entrypoint of the application, dependencies are injected here
@@ -50,11 +52,19 @@ func Run() {
 
 	log.Info("succeed to migrate the database")
 
+	token, err := token.New(cfg.Token)
+	if err != nil {
+		log.Fatal("failed to initialize the token provider", "error", err)
+	}
+
+	log.Info("succeed to initialize the token provider", "type", cfg.Token.Type)
+
 	server := http.New(cfg.Http, log)
 
 	// Dependency injection
 	province.New(server)
 	city.New(server)
+	auth.New(db, server, token)
 	category.New(db, server)
 	user.New(db, server)
 	shop.New(db, server)

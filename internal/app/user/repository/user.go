@@ -68,7 +68,7 @@ func (ur *UserRepository) IsAdmin(ctx context.Context, id uint) (res bool, err e
 	return dao.IsAdmin, nil
 }
 
-// toDomain converts a DAO Category to a Category.
+// toDomain converts a DAO User to a User.
 func (ur *UserRepository) toDomain(user *dao.User) *domain.User {
 	return &domain.User{
 		ID:          user.ID,
@@ -84,7 +84,7 @@ func (ur *UserRepository) toDomain(user *dao.User) *domain.User {
 	}
 }
 
-// toDAO converts a Category to a DAO Category.
+// toDAO converts a User to a DAO User.
 func (ur *UserRepository) toDAO(user *domain.User) *dao.User {
 	return &dao.User{
 		Model: dao.Model{
