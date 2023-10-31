@@ -47,7 +47,7 @@ func (h *Http) Start() error {
 
 // customLogger is a custom logger for Fiber
 func customLogger(l log.Logger) fiber.Handler {
-	format := `${status} | ${method} | ${path} | ${protocol} | ${ip} | ${latency} | ${ua}`
+	format := "${status} | ${method} | ${path} | ${protocol} | ${ip} | ${latency} | ${ua}\n"
 	return logger.New(logger.Config{
 		Format:        format,
 		DisableColors: true,

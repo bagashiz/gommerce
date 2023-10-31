@@ -25,15 +25,7 @@ func New(uc domain.UserUsecase, server *http.Http) *UserControllerV1 {
 
 // GetByID handles GET /users request
 func (uc *UserControllerV1) GetByID(ctx *fiber.Ctx) error {
-	idCtx := ctx.Locals("id") // TODO: implement middleware to get user id from token
-	if idCtx == nil {
-		uc.server.Logger.Error("failed to get user id from context")
-		return helper.Response(ctx, fiber.StatusUnauthorized, false, helper.FAILEDGETDATA, nil, nil)
-	}
-
-	userID := idCtx.(uint)
-
-	res, err := uc.uc.GetByID(ctx.Context(), userID)
+	res, err := uc.uc.GetByID(ctx.Context(), 1) // TODO: implement middleware to get user id from token
 	if err != nil {
 		uc.server.Logger.Error("failed to get user", "error", err)
 
@@ -51,14 +43,6 @@ func (uc *UserControllerV1) GetByID(ctx *fiber.Ctx) error {
 
 // Update handles PUT /users request
 func (uc *UserControllerV1) Update(ctx *fiber.Ctx) error {
-	idCtx := ctx.Locals("id") // TODO: implement middleware to get user id from token
-	if idCtx == nil {
-		uc.server.Logger.Error("failed to get user id from context")
-		return helper.Response(ctx, fiber.StatusUnauthorized, false, helper.FAILEDPUTDATA, nil, nil)
-	}
-
-	userID := idCtx.(uint)
-
 	var req updateUserRequest
 
 	if err := ctx.BodyParser(&req); err != nil {
@@ -71,12 +55,30 @@ func (uc *UserControllerV1) Update(ctx *fiber.Ctx) error {
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
 	}
 
+	var p userParam
+
+	if err := ctx.ParamsParser(&p); err != nil {
+		uc.server.Logger.Error("failed to parse path parameter", "error", err)
+		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
+	}
+
+	if err := uc.server.Validate.Struct(&p); err != nil {
+		uc.server.Logger.Error("failed to validate path parameter", "error", err)
+		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
+	}
+
+	birthDate, err := helper.ParseTime(req.BirthDate)
+	if err != nil {
+		uc.server.Logger.Error("failed to parse request body", "error", err)
+		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
+	}
+
 	user := &domain.User{
-		ID:          userID,
+		ID:          1, // TODO: implement middleware to get user id from token
 		Name:        req.Name,
 		PhoneNumber: req.PhoneNumber,
 		Email:       req.Email,
-		BirthDate:   req.BirthDate,
+		BirthDate:   birthDate,
 		About:       req.About,
 		Job:         req.Job,
 		ProvinceID:  req.ProvinceID,
