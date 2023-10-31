@@ -55,10 +55,16 @@ func (v *Viper) Load() (*Container, error) {
 		return nil, err
 	}
 
+	token, err := v.newTokenConfig()
+	if err != nil {
+		return nil, err
+	}
+
 	return &Container{
 		App:      app,
 		Http:     http,
 		Database: db,
+		Token:    token,
 	}, nil
 }
 
@@ -96,4 +102,16 @@ func (v *Viper) newDBConfig() (*Database, error) {
 	}
 
 	return &db, nil
+}
+
+// newTokenConfig initializes the token configuration.
+func (v *Viper) newTokenConfig() (*Token, error) {
+	var token Token
+
+	err := v.Viper.Unmarshal(&token)
+	if err != nil {
+		return nil, err
+	}
+
+	return &token, nil
 }

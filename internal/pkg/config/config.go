@@ -1,5 +1,7 @@
 package config
 
+import "time"
+
 // Config is an interface that defines the methods for the configuration loader.
 type Config interface {
 	// Load initializes the application and its dependencies configuration.
@@ -12,6 +14,7 @@ type (
 		App      *App
 		Http     *Http
 		Database *Database
+		Token    *Token
 	}
 
 	// App contains the configuration for the application.
@@ -38,6 +41,13 @@ type (
 		MaxLifeTime int    `mapstructure:"DB_MAX_LIFE_TIME"`
 		MaxOpenConn int    `mapstructure:"DB_MAX_OPEN_CONNECTIONS"`
 		MaxIdleConn int    `mapstructure:"DB_MAX_IDLE_CONNECTIONS"`
+	}
+
+	// Token contains the configuration for the token.
+	Token struct {
+		Type         string        `mapstructure:"TOKEN_TYPE"`
+		SymmetricKey string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`
+		Duration     time.Duration `mapstructure:"TOKEN_DURATION"`
 	}
 )
 

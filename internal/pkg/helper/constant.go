@@ -18,6 +18,8 @@ const (
 var (
 	// ErrUnsupportedDriver is an error message for unsupported database driver
 	ErrUnsupportedDriver = errors.New("unsupported database driver")
+	// ErrUnsupportedTokenType is an error message for unsupported token type
+	ErrUnsupportedTokenType = errors.New("unsupported token type")
 	// ErrDataNotFound is an error message for requested data not found
 	ErrDataNotFound = errors.New("data not found")
 	// ErrDataAlreadyExists is an error message for unique key constraint violation
@@ -26,4 +28,8 @@ var (
 	ErrUnauthorized = errors.New("unauthorized")
 	// ErrForbidden is an error message for forbidden access
 	ErrForbidden = errors.New("forbidden")
+	// ErrExpiredToken is an error message for expired token
+	ErrExpiredToken = errors.New("token has expired")
+	// ErrInvalidToken is an error message for invalid token
+	ErrInvalidToken = errors.New("token is invalid")
 )
