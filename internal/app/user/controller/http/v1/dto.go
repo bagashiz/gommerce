@@ -8,20 +8,20 @@ import (
 
 // userParam is a struct for validating user param
 type userParam struct {
-	ID uint `params:"id" binding:"required"`
+	ID uint `params:"id" validate:"required"`
 }
 
 // updateUserRequest is a struct for validating update user request body
 type updateUserRequest struct {
-	Name        string `json:"name,omitempty" validate:"omitempty,required"`
-	Password    string `json:"password,omitempty" validate:"omitempty,required"`
-	PhoneNumber string `json:"phone_number,omitempty" validate:"omitempty,required"`
-	Email       string `json:"email,omitempty" validate:"omitempty,required"`
-	BirthDate   string `json:"birth_date,omitempty" validate:"omitempty,required"`
-	About       string `json:"about,omitempty" validate:"omitempty,required"`
-	Job         string `json:"job,omitempty" validate:"omitempty,required"`
-	ProvinceID  string `json:"province_id,omitempty" validate:"omitempty,required"`
-	CityID      string `json:"city_id,omitempty" validate:"omitempty,required"`
+	Name        string `json:"name" validate:"omitempty,required"`
+	Password    string `json:"password" validate:"omitempty,required"`
+	PhoneNumber string `json:"phone_number" validate:"omitempty,required"`
+	Email       string `json:"email" validate:"omitempty,required"`
+	BirthDate   string `json:"birth_date" validate:"omitempty,required"`
+	About       string `json:"about" validate:"omitempty,required"`
+	Job         string `json:"job" validate:"omitempty,required"`
+	ProvinceID  string `json:"province_id" validate:"omitempty,required"`
+	CityID      string `json:"city_id" validate:"omitempty,required"`
 }
 
 // userResponse is a struct for structuring user response

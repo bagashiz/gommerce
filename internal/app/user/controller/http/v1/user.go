@@ -2,6 +2,7 @@ package v1
 
 import (
 	"errors"
+	"time"
 
 	"github.com/bagashiz/gommerce/internal/app/user/domain"
 	"github.com/bagashiz/gommerce/internal/pkg/helper"
@@ -55,22 +56,17 @@ func (uc *UserControllerV1) Update(ctx *fiber.Ctx) error {
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
 	}
 
-	var p userParam
+	var (
+		birthDate time.Time
+		err       error
+	)
 
-	if err := ctx.ParamsParser(&p); err != nil {
-		uc.server.Logger.Error("failed to parse path parameter", "error", err)
-		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
-	}
-
-	if err := uc.server.Validate.Struct(&p); err != nil {
-		uc.server.Logger.Error("failed to validate path parameter", "error", err)
-		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
-	}
-
-	birthDate, err := helper.ParseTime(req.BirthDate)
-	if err != nil {
-		uc.server.Logger.Error("failed to parse request body", "error", err)
-		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
+	if req.BirthDate != "" {
+		birthDate, err = helper.ParseTime(req.BirthDate)
+		if err != nil {
+			uc.server.Logger.Error("failed to parse request body", "error", err)
+			return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
+		}
 	}
 
 	user := &domain.User{
