@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/bagashiz/gommerce/internal/app/address"
 	"github.com/bagashiz/gommerce/internal/app/auth"
 	"github.com/bagashiz/gommerce/internal/app/category"
 	"github.com/bagashiz/gommerce/internal/app/city"
@@ -66,6 +67,7 @@ func Run() {
 	city.New(server)
 	auth.New(db, server, token)
 	category.New(db, server)
+	address.New(db, server)
 	user.New(db, server)
 	shop.New(db, server)
 
