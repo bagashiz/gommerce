@@ -8,10 +8,11 @@ import (
 	"github.com/bagashiz/gommerce/internal/app/user/usecase"
 	"github.com/bagashiz/gommerce/internal/pkg/database"
 	"github.com/bagashiz/gommerce/internal/pkg/server/http"
+	"github.com/bagashiz/gommerce/internal/pkg/token"
 )
 
 // New injects the dependencies of user package
-func New(db database.DB, server *http.Http) {
+func New(db database.DB, server *http.Http, token token.Token) {
 	userRepo := repository.New(db)
 	cityRepo := cityRepository.New()
 	provRepo := provinceRepository.New()
@@ -19,5 +20,5 @@ func New(db database.DB, server *http.Http) {
 	userV1 := v1.New(userUsecase, server)
 
 	routeV1 := server.App.Group("/v1/users")
-	userV1.InitRoutes(routeV1)
+	userV1.InitRoutes(routeV1, token)
 }

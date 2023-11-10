@@ -6,14 +6,15 @@ import (
 	"github.com/bagashiz/gommerce/internal/app/address/usecase"
 	"github.com/bagashiz/gommerce/internal/pkg/database"
 	"github.com/bagashiz/gommerce/internal/pkg/server/http"
+	"github.com/bagashiz/gommerce/internal/pkg/token"
 )
 
 // New injects the dependencies of address package
-func New(db database.DB, server *http.Http) {
+func New(db database.DB, server *http.Http, token token.Token) {
 	addrRepo := repository.New(db)
 	addrUsecase := usecase.New(addrRepo)
 	addrV1 := v1.New(addrUsecase, server)
 
 	routeV1 := server.App.Group("/v1/users/addresses")
-	addrV1.InitRoutes(routeV1)
+	addrV1.InitRoutes(routeV1, token)
 }

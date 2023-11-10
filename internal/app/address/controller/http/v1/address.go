@@ -37,12 +37,14 @@ func (ac *AddressControllerV1) Create(ctx *fiber.Ctx) error {
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPOSTDATA, err, nil)
 	}
 
+	userID := ctx.Locals("user_id").(uint)
+
 	addr := &domain.Address{
 		Title:       req.Title,
 		Receiver:    req.Receiver,
 		PhoneNumber: req.PhoneNumber,
 		Details:     req.Details,
-		UserID:      1, // TODO: implement middleware to get user id from token
+		UserID:      userID,
 	}
 
 	if err := ac.uc.Create(ctx.Context(), addr); err != nil {
@@ -67,7 +69,9 @@ func (ac *AddressControllerV1) GetAll(ctx *fiber.Ctx) error {
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDGETDATA, err, nil)
 	}
 
-	res, err := ac.uc.GetAll(ctx.Context(), 1, q.Title) // TODO: implement middleware to get user id from token
+	userID := ctx.Locals("user_id").(uint)
+
+	res, err := ac.uc.GetAll(ctx.Context(), userID, q.Title)
 	if err != nil {
 		ac.server.Logger.Error("failed to get addresses", "error", err)
 		return helper.Response(ctx, fiber.StatusInternalServerError, false, helper.FAILEDGETDATA, err, nil)
@@ -96,7 +100,9 @@ func (ac *AddressControllerV1) GetByID(ctx *fiber.Ctx) error {
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDGETDATA, err, nil)
 	}
 
-	res, err := ac.uc.GetByID(ctx.Context(), 1, p.ID) // TODO: implement middleware to get user id from token
+	userID := ctx.Locals("user_id").(uint)
+
+	res, err := ac.uc.GetByID(ctx.Context(), userID, p.ID)
 	if err != nil {
 		ac.server.Logger.Error("failed to get address", "error", err)
 
@@ -113,30 +119,32 @@ func (ac *AddressControllerV1) GetByID(ctx *fiber.Ctx) error {
 }
 
 // Update handles PUT /users/Addresses request
-func (uc *AddressControllerV1) Update(ctx *fiber.Ctx) error {
+func (ac *AddressControllerV1) Update(ctx *fiber.Ctx) error {
 	var req updateAddrRequest
 
 	if err := ctx.BodyParser(&req); err != nil {
-		uc.server.Logger.Error("failed to parse request body", "error", err)
+		ac.server.Logger.Error("failed to parse request body", "error", err)
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
 	}
 
-	if err := uc.server.Validate.Struct(&req); err != nil {
-		uc.server.Logger.Error("failed to validate request body", "error", err)
+	if err := ac.server.Validate.Struct(&req); err != nil {
+		ac.server.Logger.Error("failed to validate request body", "error", err)
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
 	}
 
 	var p addrParam
 
 	if err := ctx.ParamsParser(&p); err != nil {
-		uc.server.Logger.Error("failed to parse path parameter", "error", err)
+		ac.server.Logger.Error("failed to parse path parameter", "error", err)
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
 	}
 
-	if err := uc.server.Validate.Struct(&p); err != nil {
-		uc.server.Logger.Error("failed to validate path parameter", "error", err)
+	if err := ac.server.Validate.Struct(&p); err != nil {
+		ac.server.Logger.Error("failed to validate path parameter", "error", err)
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
 	}
+
+	userID := ctx.Locals("user_id").(uint)
 
 	addr := &domain.Address{
 		ID:          p.ID,
@@ -144,11 +152,11 @@ func (uc *AddressControllerV1) Update(ctx *fiber.Ctx) error {
 		Receiver:    req.Receiver,
 		PhoneNumber: req.PhoneNumber,
 		Details:     req.Details,
-		UserID:      1, // TODO: implement middleware to get user id from token
+		UserID:      userID,
 	}
 
-	if err := uc.uc.Update(ctx.Context(), addr); err != nil {
-		uc.server.Logger.Error("failed to update address", "error", err)
+	if err := ac.uc.Update(ctx.Context(), addr); err != nil {
+		ac.server.Logger.Error("failed to update address", "error", err)
 
 		if errors.Is(err, helper.ErrDataNotFound) {
 			return helper.Response(ctx, fiber.StatusNotFound, false, helper.FAILEDPUTDATA, err, nil)
@@ -161,21 +169,23 @@ func (uc *AddressControllerV1) Update(ctx *fiber.Ctx) error {
 }
 
 // Delete handles DELETE /users/Addresses request
-func (uc *AddressControllerV1) Delete(ctx *fiber.Ctx) error {
+func (ac *AddressControllerV1) Delete(ctx *fiber.Ctx) error {
 	var p addrParam
 
 	if err := ctx.ParamsParser(&p); err != nil {
-		uc.server.Logger.Error("failed to parse path parameter", "error", err)
+		ac.server.Logger.Error("failed to parse path parameter", "error", err)
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDDELETEDATA, err, nil)
 	}
 
-	if err := uc.server.Validate.Struct(&p); err != nil {
-		uc.server.Logger.Error("failed to validate path parameter", "error", err)
+	if err := ac.server.Validate.Struct(&p); err != nil {
+		ac.server.Logger.Error("failed to validate path parameter", "error", err)
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDDELETEDATA, err, nil)
 	}
 
-	if err := uc.uc.Delete(ctx.Context(), 1, p.ID); err != nil { // TODO: implement middleware to get user id from token
-		uc.server.Logger.Error("failed to delete address", "error", err)
+	userID := ctx.Locals("user_id").(uint)
+
+	if err := ac.uc.Delete(ctx.Context(), userID, p.ID); err != nil {
+		ac.server.Logger.Error("failed to delete address", "error", err)
 
 		if errors.Is(err, helper.ErrDataNotFound) {
 			return helper.Response(ctx, fiber.StatusNotFound, false, helper.FAILEDDELETEDATA, err, nil)

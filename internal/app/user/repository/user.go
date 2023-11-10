@@ -99,5 +99,6 @@ func (ur *UserRepository) toDAO(user *domain.User) *dao.User {
 		Job:         user.Job,
 		ProvinceID:  user.ProvinceID,
 		CityID:      user.CityID,
+		IsAdmin:     user.IsAdmin,
 	}
 }

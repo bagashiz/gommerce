@@ -29,9 +29,9 @@ func newJWT(secretKey string, duration time.Duration) (*Jwt, error) {
 	}, nil
 }
 
-// Create creates a new token for a specific email and duration.
-func (j *Jwt) Create(email string) (string, error) {
-	payload, err := NewPayload(email, j.duration)
+// Create creates a new token for a specific user id, role, and duration.
+func (j *Jwt) Create(userID uint, isAdmin bool) (string, error) {
+	payload, err := NewPayload(userID, isAdmin, j.duration)
 	if err != nil {
 		return "", err
 	}

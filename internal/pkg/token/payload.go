@@ -10,13 +10,14 @@ import (
 // Payload contains the payload data of the token
 type Payload struct {
 	ID        uuid.UUID `json:"id"`
-	Username  string    `json:"username"`
+	UserID    uint      `json:"user_id"`
+	IsAdmin   bool      `json:"is_admin"`
 	IsUsedAt  time.Time `json:"isused_at"`
 	ExpiredAt time.Time `json:"expired_at"`
 }
 
-// NewPayload creates a new token payload with a specific email and duration
-func NewPayload(username string, duration time.Duration) (*Payload, error) {
+// NewPayload creates a new token payload with a specific user id, role, and duration
+func NewPayload(userID uint, isAdmin bool, duration time.Duration) (*Payload, error) {
 	tokenID, err := uuid.NewRandom()
 	if err != nil {
 		return nil, err
@@ -24,7 +25,8 @@ func NewPayload(username string, duration time.Duration) (*Payload, error) {
 
 	payload := &Payload{
 		ID:        tokenID,
-		Username:  username,
+		UserID:    userID,
+		IsAdmin:   isAdmin,
 		IsUsedAt:  time.Now(),
 		ExpiredAt: time.Now().Add(duration),
 	}
