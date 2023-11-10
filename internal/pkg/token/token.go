@@ -7,8 +7,8 @@ import (
 
 // Token is an interface for token implementations
 type Token interface {
-	// Create creates a new token for a specific email and duration
-	Create(email string) (string, error)
+	// Create creates a new token for a specific user id, role, and duration
+	Create(userID uint, isAdmin bool) (string, error)
 	// Verify checks if the token is valid or not
 	Verify(token string) (*Payload, error)
 }
