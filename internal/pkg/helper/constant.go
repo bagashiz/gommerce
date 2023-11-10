@@ -12,6 +12,8 @@ const (
 	SUCCEEDGETDATA    = "Succeed to GET data"
 	SUCCEEDPUTDATA    = "Succeed to PUT data"
 	SUCCEEDDELETEDATA = "Succeed to DELETE data"
+	UNAUTHORIZED      = "Unauthorized"
+	FORBIDDEN         = "Forbidden"
 )
 
 // Error messages
@@ -32,4 +34,12 @@ var (
 	ErrExpiredToken = errors.New("token has expired")
 	// ErrInvalidToken is an error message for invalid token
 	ErrInvalidToken = errors.New("token is invalid")
+	// ErrEmptyAuthorizationHeader is an error message for empty authorization header
+	ErrEmptyAuthorizationHeader = errors.New("empty authorization header")
+	// ErrInvalidAuthorizationHeader is an error message for invalid authorization header
+	ErrInvalidAuthorizationHeader = errors.New("invalid authorization header")
+	// ErrInvalidAuthorizationType is an error message for invalid authorization type
+	ErrInvalidAuthorizationType = errors.New("invalid authorization type")
+	// ErrInsufficientPermission is an error message for insufficient permission to access a resource
+	ErrInsufficientPermission = errors.New("only admin can access this resource")
 )

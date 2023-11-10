@@ -64,7 +64,7 @@ func (au *AuthUsecase) Login(ctx context.Context, phoneNumber, password string) 
 		return nil, nil, nil, "", err
 	}
 
-	token, err := au.tokenMaker.Create(user.Email)
+	token, err := au.tokenMaker.Create(user.ID, user.IsAdmin)
 	if err != nil {
 		return nil, nil, nil, "", err
 	}

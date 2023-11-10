@@ -66,10 +66,10 @@ func Run() {
 	province.New(server)
 	city.New(server)
 	auth.New(db, server, token)
-	category.New(db, server)
-	address.New(db, server)
-	user.New(db, server)
-	shop.New(db, server)
+	category.New(db, server, token)
+	address.New(db, server, token)
+	user.New(db, server, token)
+	shop.New(db, server, token)
 
 	log.Info("starting the application", "name", cfg.App.Name, "environment", cfg.App.Env)
 

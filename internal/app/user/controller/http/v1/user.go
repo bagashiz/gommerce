@@ -26,7 +26,9 @@ func New(uc domain.UserUsecase, server *http.Http) *UserControllerV1 {
 
 // GetByID handles GET /users request
 func (uc *UserControllerV1) GetByID(ctx *fiber.Ctx) error {
-	res, err := uc.uc.GetByID(ctx.Context(), 1) // TODO: implement middleware to get user id from token
+	userID := ctx.Locals("user_id").(uint)
+
+	res, err := uc.uc.GetByID(ctx.Context(), userID)
 	if err != nil {
 		uc.server.Logger.Error("failed to get user", "error", err)
 
@@ -56,6 +58,8 @@ func (uc *UserControllerV1) Update(ctx *fiber.Ctx) error {
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
 	}
 
+	userID := ctx.Locals("user_id").(uint)
+
 	var (
 		birthDate time.Time
 		err       error
@@ -70,7 +74,7 @@ func (uc *UserControllerV1) Update(ctx *fiber.Ctx) error {
 	}
 
 	user := &domain.User{
-		ID:          1, // TODO: implement middleware to get user id from token
+		ID:          userID,
 		Name:        req.Name,
 		PhoneNumber: req.PhoneNumber,
 		Email:       req.Email,

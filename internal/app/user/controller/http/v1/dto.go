@@ -6,11 +6,6 @@ import (
 	"github.com/bagashiz/gommerce/internal/app/user/domain"
 )
 
-// userParam is a struct for validating user param
-type userParam struct {
-	ID uint `params:"id" validate:"required"`
-}
-
 // updateUserRequest is a struct for validating update user request body
 type updateUserRequest struct {
 	Name        string `json:"name" validate:"omitempty,required"`

@@ -60,13 +60,7 @@ func (sc *ShopControllerV1) GetAll(ctx *fiber.Ctx) error {
 
 // GetUserShop handles GET /shops/my request
 func (sc *ShopControllerV1) GetUserShop(ctx *fiber.Ctx) error {
-	idCtx := ctx.Locals("id") // TODO: implement middleware to get user id from token
-	if idCtx == nil {
-		sc.server.Logger.Error("failed to get user id from context")
-		return helper.Response(ctx, fiber.StatusUnauthorized, false, helper.FAILEDGETDATA, nil, nil)
-	}
-
-	userID := idCtx.(uint)
+	userID := ctx.Locals("user_id").(uint)
 
 	res, err := sc.uc.GetUserShop(ctx.Context(), userID)
 	if err != nil {
@@ -116,14 +110,6 @@ func (sc *ShopControllerV1) GetByID(ctx *fiber.Ctx) error {
 
 // Update handles PUT /shops/:id request
 func (sc *ShopControllerV1) Update(ctx *fiber.Ctx) error {
-	idCtx := ctx.Locals("id") // TODO: implement middleware to get user id from token
-	if idCtx == nil {
-		sc.server.Logger.Error("failed to get user id from context")
-		return helper.Response(ctx, fiber.StatusUnauthorized, false, helper.FAILEDPUTDATA, nil, nil)
-	}
-
-	userID := idCtx.(uint)
-
 	var req updateShopRequest
 
 	if err := ctx.BodyParser(&req); err != nil {
@@ -147,6 +133,8 @@ func (sc *ShopControllerV1) Update(ctx *fiber.Ctx) error {
 		sc.server.Logger.Error("failed to validate path parameter", "error", err)
 		return helper.Response(ctx, fiber.StatusBadRequest, false, helper.FAILEDPUTDATA, err, nil)
 	}
+
+	userID := ctx.Locals("user_id").(uint)
 
 	if err := sc.uc.Update(ctx.Context(), userID, p.ID); err != nil {
 		sc.server.Logger.Error("failed to update shop", "error", err)

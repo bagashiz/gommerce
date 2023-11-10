@@ -22,6 +22,7 @@ type User struct {
 	CityID      string            `json:"city_id"`
 	Province    *provDom.Province `json:"province"`
 	City        *cityDom.City     `json:"city"`
+	IsAdmin     bool              `json:"is_admin"`
 }
 
 // UserRepository is an interface that provides access to the User storage.
