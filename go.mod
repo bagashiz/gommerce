@@ -12,7 +12,7 @@ require (
 	github.com/spf13/viper v1.17.0
 	go.uber.org/mock v0.3.0
 	go.uber.org/zap v1.26.0
-	golang.org/x/crypto v0.14.0
+	golang.org/x/crypto v0.15.0
 	gorm.io/driver/mysql v1.5.2
 	gorm.io/gorm v1.25.5
 )
